@@ -15,31 +15,9 @@
  */
 package com.premsan.endless.base;
 
-public final class Property<T> {
+public final class Value<T> {
 
-    private final String name;
+    private Class<T> type;
 
-    private Value<T> value;
-
-    public Property(final String name, final Value<T> value) {
-
-        this.name = name;
-        this.value = value;
-    }
-
-    public String name() {
-
-        return this.name;
-    }
-
-    public Value<T> value() {
-
-        return this.value;
-    }
-
-    public Property<T> value(final Value<T> value) {
-
-        this.value = value;
-        return this;
-    }
+    private T value;
 }

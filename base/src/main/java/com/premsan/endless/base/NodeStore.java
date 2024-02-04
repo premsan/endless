@@ -15,4 +15,11 @@
  */
 package com.premsan.endless.base;
 
-public interface NodeStore {}
+public interface NodeStore {
+
+    /**
+     * @param node Node
+     * @return Node
+     */
+    Node store(Node node);
+}

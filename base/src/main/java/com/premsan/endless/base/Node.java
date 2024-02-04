@@ -30,6 +30,8 @@ public final class Node {
 
     private final Map<Node, String> parentRoleMap;
 
+    private final Set<Property<?>> properties = new HashSet<>();
+
     private Node(final String id, final Set<String> tags, final Map<Node, String> parentRoleMap) {
 
         this.id = id;
@@ -62,6 +64,29 @@ public final class Node {
     public Map<Node, String> parentRoleMap() {
 
         return Collections.unmodifiableMap(this.parentRoleMap);
+    }
+
+    public Set<Property<?>> properties() {
+
+        return Collections.unmodifiableSet(this.properties);
+    }
+
+    public Node addProperty(final Property<?> property) {
+
+        this.properties.add(Objects.requireNonNull(property, "tag must not be null"));
+        return this;
+    }
+
+    public Node removeProperty(final Property<?> property) {
+
+        this.properties.remove(property);
+        return this;
+    }
+
+    public Node clearProperties() {
+
+        this.properties.clear();
+        return this;
     }
 
     public static class Builder {
