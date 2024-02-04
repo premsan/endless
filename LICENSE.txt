@@ -1,0 +1,7 @@
+Portions of work in this repository is covered by a license as follows:
+
+* All Source code under root folder and its sub folders are under "Apache License 2.0" unless
+  overridden in a sub folder by a license as explained below
+
+* All Source code under base folder and its sub folders are licensed under "Apache License 2.0"
+* All Source code under wing folder and its sub folders are licensed under "Business Source License 1.1"
