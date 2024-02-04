@@ -1,9 +1,10 @@
 plugins {
     id("java")
+    id("com.diffplug.spotless")
 }
 
 group = "com.premsan.endless"
-version = "unspecified"
+version = "0.0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -16,4 +17,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        googleJavaFormat("1.19.2").aosp().reflowLongStrings().skipJavadocFormatting()
+        formatAnnotations()
+
+        licenseHeaderFile("license-header")
+    }
 }
