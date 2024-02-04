@@ -15,17 +15,48 @@
  */
 package com.premsan.endless.base;
 
-public abstract class Node {
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-    private String id;
+public final class Node {
 
-    public String id() {
-        return id;
+    private final String id;
+
+    private final Set<String> tags;
+
+    public Node(final String id) {
+
+        this.id = Objects.requireNonNull(id, "id must not be null");
+        this.tags = new HashSet<>();
     }
 
-    public Node setId(String id) {
+    public Node(final String id, final Set<String> tags) {
 
-        this.id = id;
+        this.id = Objects.requireNonNull(id, "id must not be null");
+        this.tags = Objects.requireNonNull(tags, "tags must not be null");
+    }
+
+    public String id() {
+
+        return this.id;
+    }
+
+    public Set<String> tags() {
+
+        return Collections.unmodifiableSet(this.tags);
+    }
+
+    public Node addTag(final String tag) {
+
+        this.tags.add(Objects.requireNonNull(tag, "tag must not be null"));
+        return this;
+    }
+
+    public Node removeTag(final String tag) {
+
+        this.tags.remove(Objects.requireNonNull(tag, "tag must not be null"));
         return this;
     }
 }
