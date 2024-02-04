@@ -15,6 +15,8 @@
  */
 package com.premsan.endless.base;
 
+import java.util.Objects;
+
 public final class Property<T> {
 
     private final String name;
@@ -23,8 +25,8 @@ public final class Property<T> {
 
     public Property(final String name, final Value<T> value) {
 
-        this.name = name;
-        this.value = value;
+        this.name = Objects.requireNonNull(name, "name must not be null");
+        this.value = Objects.requireNonNull(value, "value must not be null");
     }
 
     public String name() {
@@ -39,7 +41,7 @@ public final class Property<T> {
 
     public Property<T> value(final Value<T> value) {
 
-        this.value = value;
+        this.value = Objects.requireNonNull(value, "value must not be null");
         return this;
     }
 }

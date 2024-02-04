@@ -73,13 +73,13 @@ public final class Node {
 
     public Node addProperty(final Property<?> property) {
 
-        this.properties.add(Objects.requireNonNull(property, "tag must not be null"));
+        this.properties.add(Objects.requireNonNull(property, "property must not be null"));
         return this;
     }
 
     public Node removeProperty(final Property<?> property) {
 
-        this.properties.remove(property);
+        this.properties.remove(Objects.requireNonNull(property, "property must not be null"));
         return this;
     }
 

@@ -21,5 +21,5 @@ public interface NodeStore {
      * @param node Node
      * @return Node
      */
-    Node store(Node node);
+    Node store(final Node node);
 }
