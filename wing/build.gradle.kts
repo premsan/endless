@@ -23,5 +23,7 @@ spotless {
     java {
         googleJavaFormat("1.19.2").aosp().reflowLongStrings().skipJavadocFormatting()
         formatAnnotations()
+
+        licenseHeaderFile("license-header")
     }
 }
