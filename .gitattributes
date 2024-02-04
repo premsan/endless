@@ -1,0 +1,5 @@
+# Normalize line endings to auto.
+* text auto
+
+# Ensure that line endings for DOS batch files are not modified.
+*.bat -text
