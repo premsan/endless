@@ -13,19 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.premsan.base;
+package com.premsan.endless.base;
 
-public abstract class Node {
-
-    private String id;
-
-    public String id() {
-        return id;
-    }
-
-    public Node setId(String id) {
-
-        this.id = id;
-        return this;
-    }
-}
+public class Property {}
