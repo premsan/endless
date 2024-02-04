@@ -15,17 +15,118 @@
  */
 package com.premsan.endless.base;
 
-public abstract class Node {
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-    private String id;
+public final class Node {
 
-    public String id() {
-        return id;
-    }
+    private final String id;
 
-    public Node setId(String id) {
+    private final Set<String> tags;
+
+    private final Map<Node, String> parentRoleMap;
+
+    private final Set<Property<?>> properties = new HashSet<>();
+
+    private Node(final String id, final Set<String> tags, final Map<Node, String> parentRoleMap) {
 
         this.id = id;
+        this.tags = tags;
+        this.parentRoleMap = parentRoleMap;
+    }
+
+    public String id() {
+
+        return this.id;
+    }
+
+    public Set<String> tags() {
+
+        return Collections.unmodifiableSet(this.tags);
+    }
+
+    public Node addTag(final String tag) {
+
+        this.tags.add(Objects.requireNonNull(tag, "tag must not be null"));
         return this;
+    }
+
+    public Node removeTag(final String tag) {
+
+        this.tags.remove(Objects.requireNonNull(tag, "tag must not be null"));
+        return this;
+    }
+
+    public Map<Node, String> parentRoleMap() {
+
+        return Collections.unmodifiableMap(this.parentRoleMap);
+    }
+
+    public Set<Property<?>> properties() {
+
+        return Collections.unmodifiableSet(this.properties);
+    }
+
+    public Node addProperty(final Property<?> property) {
+
+        this.properties.add(Objects.requireNonNull(property, "property must not be null"));
+        return this;
+    }
+
+    public Node removeProperty(final Property<?> property) {
+
+        this.properties.remove(Objects.requireNonNull(property, "property must not be null"));
+        return this;
+    }
+
+    public Node clearProperties() {
+
+        this.properties.clear();
+        return this;
+    }
+
+    public static class Builder {
+
+        private String id;
+
+        private Set<String> tags;
+
+        private Map<Node, String> parentRoleMap;
+
+        public Builder id(final String id) {
+
+            this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        public Builder tags(final Set<String> tags) {
+
+            this.tags = Objects.requireNonNull(tags, "tags must not be null");
+            return this;
+        }
+
+        public Builder parentRoleMap(final Map<Node, String> parentRoleMap) {
+
+            this.parentRoleMap =
+                    Objects.requireNonNull(parentRoleMap, "parentRoleMap must not be null");
+            return this;
+        }
+
+        public Node build() {
+
+            if (this.tags == null) {
+                this.tags = new HashSet<>();
+            }
+
+            if (this.parentRoleMap == null) {
+                this.parentRoleMap = new HashMap<>();
+            }
+
+            return new Node(this.id, this.tags, this.parentRoleMap);
+        }
     }
 }

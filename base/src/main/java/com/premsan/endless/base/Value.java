@@ -15,11 +15,25 @@
  */
 package com.premsan.endless.base;
 
-public interface NodeStore {
+import java.util.Objects;
 
-    /**
-     * @param node Node
-     * @return Node
-     */
-    Node store(final Node node);
+public final class Value<T> {
+
+    private final Class<T> type;
+
+    private final T value;
+
+    public Value(final Class<T> type, final T value) {
+
+        this.type = Objects.requireNonNull(type, "type must not be null");
+        this.value = Objects.requireNonNull(value, "value must not be null");
+    }
+
+    public Class<T> type() {
+        return type;
+    }
+
+    public T value() {
+        return value;
+    }
 }

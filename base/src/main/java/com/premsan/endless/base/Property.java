@@ -15,4 +15,33 @@
  */
 package com.premsan.endless.base;
 
-public class Property {}
+import java.util.Objects;
+
+public final class Property<T> {
+
+    private final String name;
+
+    private Value<T> value;
+
+    public Property(final String name, final Value<T> value) {
+
+        this.name = Objects.requireNonNull(name, "name must not be null");
+        this.value = Objects.requireNonNull(value, "value must not be null");
+    }
+
+    public String name() {
+
+        return this.name;
+    }
+
+    public Value<T> value() {
+
+        return this.value;
+    }
+
+    public Property<T> value(final Value<T> value) {
+
+        this.value = Objects.requireNonNull(value, "value must not be null");
+        return this;
+    }
+}

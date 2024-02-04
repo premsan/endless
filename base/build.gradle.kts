@@ -28,6 +28,7 @@ tasks.test {
 spotless {
     java {
         googleJavaFormat("1.19.2").aosp().reflowLongStrings().skipJavadocFormatting()
+        removeUnusedImports()
         formatAnnotations()
 
         licenseHeaderFile("license-header")
