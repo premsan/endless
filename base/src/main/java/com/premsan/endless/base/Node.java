@@ -15,10 +15,7 @@
  */
 package com.premsan.endless.base;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public final class Node {
 
@@ -26,16 +23,13 @@ public final class Node {
 
     private final Set<String> tags;
 
-    public Node(final String id) {
+    private final Map<Node, String> parentRoleMap;
 
-        this.id = Objects.requireNonNull(id, "id must not be null");
-        this.tags = new HashSet<>();
-    }
+    private Node(final String id, final Set<String> tags, final Map<Node, String> parentRoleMap) {
 
-    public Node(final String id, final Set<String> tags) {
-
-        this.id = Objects.requireNonNull(id, "id must not be null");
-        this.tags = Objects.requireNonNull(tags, "tags must not be null");
+        this.id = id;
+        this.tags = tags;
+        this.parentRoleMap = parentRoleMap;
     }
 
     public String id() {
@@ -58,5 +52,51 @@ public final class Node {
 
         this.tags.remove(Objects.requireNonNull(tag, "tag must not be null"));
         return this;
+    }
+
+    public Map<Node, String> parentRoleMap() {
+
+        return Collections.unmodifiableMap(this.parentRoleMap);
+    }
+
+    public static class Builder {
+
+        private String id;
+
+        private Set<String> tags;
+
+        private Map<Node, String> parentRoleMap;
+
+        public Builder id(final String id) {
+
+            this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        public Builder tags(final Set<String> tags) {
+
+            this.tags = Objects.requireNonNull(tags, "tags must not be null");
+            return this;
+        }
+
+        public Builder parentRoleMap(final Map<Node, String> parentRoleMap) {
+
+            this.parentRoleMap =
+                    Objects.requireNonNull(parentRoleMap, "parentRoleMap must not be null");
+            return this;
+        }
+
+        public Node build() {
+
+            if (this.tags == null) {
+                this.tags = new HashSet<>();
+            }
+
+            if (this.parentRoleMap == null) {
+                this.parentRoleMap = new HashMap<>();
+            }
+
+            return new Node(this.id, this.tags, this.parentRoleMap);
+        }
     }
 }
