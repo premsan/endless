@@ -18,16 +18,17 @@ package com.premsan.endless.base;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class NodeBuilder {
 
-    private String id;
+    private UUID id;
 
     private Concept concept;
 
     private final Map<Node, String> parents = new HashMap<>();
 
-    public NodeBuilder id(final String id) {
+    NodeBuilder id(final UUID id) {
         Objects.requireNonNull(id, "id must not be null");
 
         this.id = id;
@@ -44,15 +45,15 @@ public final class NodeBuilder {
     }
 
     public NodeBuilder addParent(final Node parent, final String role) {
-        Objects.requireNonNull(role, "role must not be null");
         Objects.requireNonNull(parent, "parent must not be null");
+        Objects.requireNonNull(role, "role must not be null");
 
         this.parents.put(parent, role);
 
         return this;
     }
 
-    public Node build() {
+    Node build() {
 
         return new Node(this.id, this.concept, this.parents);
     }

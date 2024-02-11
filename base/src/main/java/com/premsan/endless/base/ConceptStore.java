@@ -18,13 +18,16 @@ package com.premsan.endless.base;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ConceptStore {
 
     private final Map<String, Concept> concepts = new HashMap<>();
 
-    public void store(final Concept concept) {
-        Objects.requireNonNull(concept, "concept must not be null");
+    public void store(final ConceptBuilder conceptBuilder) {
+        Objects.requireNonNull(conceptBuilder, "conceptBuilder must not be null");
+
+        final Concept concept = conceptBuilder._id(UUID.randomUUID()).build();
 
         this.concepts.put(concept.getId(), concept);
     }

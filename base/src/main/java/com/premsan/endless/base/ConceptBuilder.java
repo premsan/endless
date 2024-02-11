@@ -15,30 +15,32 @@
  */
 package com.premsan.endless.base;
 
-import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
-public final class Value<T> implements Serializable {
+public class ConceptBuilder {
 
-    private final Class<T> type;
+    private UUID _id;
 
-    private final T value;
+    private String id;
 
-    public Value(final Class<T> type, final T value) {
-        Objects.requireNonNull(type, "type must not be null");
-        Objects.requireNonNull(value, "value must not be null");
+    ConceptBuilder _id(final UUID _id) {
 
-        this.type = type;
-        this.value = value;
+        this._id = _id;
+
+        return this;
     }
 
-    public Class<T> type() {
+    public ConceptBuilder id(final String id) {
+        Objects.requireNonNull(id, "id must not be null");
 
-        return type;
+        this.id = id;
+
+        return this;
     }
 
-    public T value() {
+    Concept build() {
 
-        return value;
+        return new Concept(_id, id);
     }
 }

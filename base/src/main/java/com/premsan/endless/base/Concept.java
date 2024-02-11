@@ -15,20 +15,28 @@
  */
 package com.premsan.endless.base;
 
+import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
-public final class Concept {
+public final class Concept implements Serializable {
+
+    private final UUID _id;
 
     private final String id;
 
     private final Set<Node> nodes = new HashSet<>();
 
-    public Concept(final String id) {
-        Objects.requireNonNull(id, "name must not be null");
+    Concept(final UUID _id, final String id) {
 
+        this._id = _id;
         this.id = id;
+    }
+
+    UUID get_Id() {
+
+        return this._id;
     }
 
     public String getId() {

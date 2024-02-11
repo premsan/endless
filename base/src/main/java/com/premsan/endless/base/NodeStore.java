@@ -18,18 +18,21 @@ package com.premsan.endless.base;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class NodeStore {
 
-    private final Map<String, Node> nodes = new HashMap<>();
+    private final Map<UUID, Node> nodes = new HashMap<>();
 
-    public void store(final Node node) {
-        Objects.requireNonNull(node, "node must not be null");
+    public void store(final NodeBuilder nodeBuilder) {
+        Objects.requireNonNull(nodeBuilder, "nodeBuilder must not be null");
+
+        final Node node = nodeBuilder.id(UUID.randomUUID()).build();
 
         this.nodes.put(node.getId(), node);
     }
 
-    public Node find(final String id) {
+    public Node find(final UUID id) {
         Objects.requireNonNull(id, "id must not be null");
 
         return this.nodes.get(id);
