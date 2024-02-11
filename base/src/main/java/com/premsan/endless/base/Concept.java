@@ -15,11 +15,15 @@
  */
 package com.premsan.endless.base;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public final class Concept {
 
     private final String name;
+
+    private final Set<Node> nodes = new HashSet<>();
 
     public Concept(final String name) {
         Objects.requireNonNull(name, "name must not be null");
@@ -29,5 +33,15 @@ public final class Concept {
 
     public String getName() {
         return this.name;
+    }
+
+    void addNode(final Node node) {
+
+        this.nodes.add(node);
+    }
+
+    Set<Node> getNodes() {
+
+        return this.nodes;
     }
 }

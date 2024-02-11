@@ -38,8 +38,14 @@ public final class Node {
     Node(final String id, final Concept concept, final Map<Node, String> parents) {
 
         this.id = id;
+
         this.concept = concept;
+        this.concept.addNode(this);
+
         this.parents = parents;
+        for (final Node node : parents.keySet()) {
+            node.addChild(this);
+        }
     }
 
     public String getId() {
