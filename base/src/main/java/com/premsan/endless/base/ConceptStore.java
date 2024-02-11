@@ -15,34 +15,23 @@
  */
 package com.premsan.endless.base;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-public final class Concept {
+public class ConceptStore {
 
-    private final String id;
+    private final Map<String, Concept> concepts = new HashMap<>();
 
-    private final Set<Node> nodes = new HashSet<>();
+    public void store(final Concept concept) {
+        Objects.requireNonNull(concept, "concept must not be null");
 
-    public Concept(final String id) {
-        Objects.requireNonNull(id, "name must not be null");
-
-        this.id = id;
+        this.concepts.put(concept.getId(), concept);
     }
 
-    public String getId() {
+    public Concept find(final String id) {
+        Objects.requireNonNull(id, "id must not be null");
 
-        return this.id;
-    }
-
-    void addNode(final Node node) {
-
-        this.nodes.add(node);
-    }
-
-    public Set<Node> getNodes() {
-
-        return this.nodes;
+        return this.concepts.get(id);
     }
 }
