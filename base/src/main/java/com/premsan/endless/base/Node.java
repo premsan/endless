@@ -31,6 +31,8 @@ public final class Node {
 
     private final Map<String, Value<?>> properties = new HashMap<>();
 
+    private final Map<Value<?>, String> oldProperties = new HashMap<>();
+
     private final Set<Node> children = new HashSet<>();
 
     Node(final String id, final Concept concept, final Map<Node, String> parents) {
