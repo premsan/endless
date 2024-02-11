@@ -24,16 +24,20 @@ public final class Value<T> {
     private final T value;
 
     public Value(final Class<T> type, final T value) {
+        Objects.requireNonNull(type, "type must not be null");
+        Objects.requireNonNull(value, "value must not be null");
 
-        this.type = Objects.requireNonNull(type, "type must not be null");
-        this.value = Objects.requireNonNull(value, "value must not be null");
+        this.type = type;
+        this.value = value;
     }
 
     public Class<T> type() {
+
         return type;
     }
 
     public T value() {
+
         return value;
     }
 }

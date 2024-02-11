@@ -15,33 +15,33 @@
  */
 package com.premsan.endless.base;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-public final class Property<T> {
+public final class Concept {
 
     private final String name;
 
-    private Value<T> value;
+    private final Set<Node> nodes = new HashSet<>();
 
-    public Property(final String name, final Value<T> value) {
+    public Concept(final String name) {
+        Objects.requireNonNull(name, "name must not be null");
 
-        this.name = Objects.requireNonNull(name, "name must not be null");
-        this.value = Objects.requireNonNull(value, "value must not be null");
+        this.name = name;
     }
 
-    public String name() {
-
+    public String getName() {
         return this.name;
     }
 
-    public Value<T> value() {
+    void addNode(final Node node) {
 
-        return this.value;
+        this.nodes.add(node);
     }
 
-    public Property<T> value(final Value<T> value) {
+    Set<Node> getNodes() {
 
-        this.value = Objects.requireNonNull(value, "value must not be null");
-        return this;
+        return this.nodes;
     }
 }
