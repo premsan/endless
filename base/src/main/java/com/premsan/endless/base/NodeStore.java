@@ -15,11 +15,26 @@
  */
 package com.premsan.endless.base;
 
-public interface NodeStore {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
-    /**
-     * @param node Node
-     * @return Node
-     */
-    Node store(final Node node);
+public final class NodeStore {
+
+    private final Map<UUID, Node> nodes = new HashMap<>();
+
+    public void store(final NodeBuilder nodeBuilder) {
+        Objects.requireNonNull(nodeBuilder, "nodeBuilder must not be null");
+
+        final Node node = nodeBuilder.id(UUID.randomUUID()).build();
+
+        this.nodes.put(node.getId(), node);
+    }
+
+    public Node find(final UUID id) {
+        Objects.requireNonNull(id, "id must not be null");
+
+        return this.nodes.get(id);
+    }
 }

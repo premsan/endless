@@ -15,30 +15,26 @@
  */
 package com.premsan.endless.base;
 
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
-public final class Value<T> implements Serializable {
+public class ConceptStore {
 
-    private final Class<T> type;
+    private final Map<String, Concept> concepts = new HashMap<>();
 
-    private final T value;
+    public void store(final ConceptBuilder conceptBuilder) {
+        Objects.requireNonNull(conceptBuilder, "conceptBuilder must not be null");
 
-    public Value(final Class<T> type, final T value) {
-        Objects.requireNonNull(type, "type must not be null");
-        Objects.requireNonNull(value, "value must not be null");
+        final Concept concept = conceptBuilder._id(UUID.randomUUID()).build();
 
-        this.type = type;
-        this.value = value;
+        this.concepts.put(concept.getId(), concept);
     }
 
-    public Class<T> type() {
+    public Concept find(final String id) {
+        Objects.requireNonNull(id, "id must not be null");
 
-        return type;
-    }
-
-    public T value() {
-
-        return value;
+        return this.concepts.get(id);
     }
 }

@@ -15,24 +15,33 @@
  */
 package com.premsan.endless.base;
 
+import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
-public final class Concept {
+public final class Concept implements Serializable {
 
-    private final String name;
+    private final UUID _id;
+
+    private final String id;
 
     private final Set<Node> nodes = new HashSet<>();
 
-    public Concept(final String name) {
-        Objects.requireNonNull(name, "name must not be null");
+    Concept(final UUID _id, final String id) {
 
-        this.name = name;
+        this._id = _id;
+        this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+    UUID get_Id() {
+
+        return this._id;
+    }
+
+    public String getId() {
+
+        return this.id;
     }
 
     void addNode(final Node node) {
@@ -40,7 +49,7 @@ public final class Concept {
         this.nodes.add(node);
     }
 
-    Set<Node> getNodes() {
+    public Set<Node> getNodes() {
 
         return this.nodes;
     }

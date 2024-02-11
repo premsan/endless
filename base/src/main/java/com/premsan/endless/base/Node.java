@@ -15,15 +15,17 @@
  */
 package com.premsan.endless.base;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
-public final class Node {
+public final class Node implements Serializable {
 
-    private final String id;
+    private final UUID id;
 
     private final Concept concept;
 
@@ -35,7 +37,7 @@ public final class Node {
 
     private final Set<Node> children = new HashSet<>();
 
-    Node(final String id, final Concept concept, final Map<Node, String> parents) {
+    Node(final UUID id, final Concept concept, final Map<Node, String> parents) {
 
         this.id = id;
 
@@ -48,7 +50,7 @@ public final class Node {
         }
     }
 
-    public String getId() {
+    public UUID getId() {
 
         return this.id;
     }
