@@ -15,32 +15,20 @@
  */
 package com.premsan.endless.base;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ConceptBuilder {
+class ConceptCache {
 
-    private UUID _id;
+    private final Map<String, Concept> concepts = new HashMap<>();
 
-    private String id;
+    public void store(final Concept concept) {
 
-    ConceptBuilder _id(final UUID _id) {
-
-        this._id = _id;
-
-        return this;
+        this.concepts.put(concept.getId(), concept);
     }
 
-    public ConceptBuilder id(final String id) {
-        Objects.requireNonNull(id, "id must not be null");
+    public Concept find(final String id) {
 
-        this.id = id;
-
-        return this;
-    }
-
-    Concept build() {
-
-        return new Concept(_id, id);
+        return this.concepts.get(id);
     }
 }

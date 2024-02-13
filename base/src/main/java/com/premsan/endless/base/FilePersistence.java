@@ -15,32 +15,28 @@
  */
 package com.premsan.endless.base;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
-public final class Value<T extends Serializable> implements Serializable {
+public class FilePersistence {
 
-    private static final long serialVersionUID = 2L;
+    private final ObjectOutputStream objectOutputStream;
 
-    private final Class<T> type;
+    public FilePersistence(final File file) throws IOException {
 
-    private final T value;
-
-    public Value(final Class<T> type, final T value) {
-        Objects.requireNonNull(type, "type must not be null");
-        Objects.requireNonNull(value, "value must not be null");
-
-        this.type = type;
-        this.value = value;
+        final FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+        this.objectOutputStream = new ObjectOutputStream(fileOutputStream);
     }
 
-    public Class<T> type() {
+    public void persist(final Node node) throws IOException {
 
-        return type;
+        this.objectOutputStream.writeObject(node);
     }
 
-    public T value() {
+    public void close() throws IOException {
 
-        return value;
+        this.objectOutputStream.close();
     }
 }

@@ -18,25 +18,18 @@ package com.premsan.endless.base;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public final class Concept implements Serializable {
 
-    private final UUID _id;
+    private static final long serialVersionUID = 3L;
 
     private final String id;
 
     private final Set<Node> nodes = new HashSet<>();
 
-    Concept(final UUID _id, final String id) {
+    Concept(final String id) {
 
-        this._id = _id;
         this.id = id;
-    }
-
-    UUID get_Id() {
-
-        return this._id;
     }
 
     public String getId() {
