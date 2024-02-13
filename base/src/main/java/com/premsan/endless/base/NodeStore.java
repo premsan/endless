@@ -37,4 +37,11 @@ public final class NodeStore {
 
         return this.nodes.get(id);
     }
+
+    public Node load(final Node node) {
+
+        nodes.put(node.getId(), node);
+
+        return node;
+    }
 }
