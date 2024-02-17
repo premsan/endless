@@ -44,6 +44,7 @@ public final class Concept implements Serializable {
 
     public Set<Node> getNodes() {
 
+        int x = 3;
         return this.nodes;
     }
 }
