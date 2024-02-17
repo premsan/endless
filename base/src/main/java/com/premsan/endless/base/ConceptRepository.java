@@ -17,29 +17,18 @@ package com.premsan.endless.base;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
 
-public final class NodeStore {
+public class ConceptRepository {
 
-    private final Map<UUID, Node> nodes = new HashMap<>();
+    private final Map<String, Concept> conceptMap = new HashMap<>();
 
-    public void store(final NodeBuilder nodeBuilder) {
-        Objects.requireNonNull(nodeBuilder, "nodeBuilder must not be null");
+    public synchronized void save(final Concept concept) {
 
-        final Node node = nodeBuilder.id(UUID.randomUUID()).build();
-
-        this.nodes.put(node.getId(), node);
+        this.conceptMap.put(concept.getId(), concept);
     }
 
-    public Node find(final UUID id) {
-        Objects.requireNonNull(id, "id must not be null");
+    public Concept find(final String id) {
 
-        return this.nodes.get(id);
-    }
-
-    public void load(final Node node) {
-
-        nodes.put(node.getId(), node);
+        return this.conceptMap.get(id);
     }
 }

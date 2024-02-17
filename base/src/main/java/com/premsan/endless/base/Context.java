@@ -17,15 +17,29 @@ package com.premsan.endless.base;
 
 public final class Context {
 
-    private final NodeStore nodeStore;
+    private final ConceptRepository conceptRepository;
 
-    public Context(final NodeStore nodeStore) {
+    private final NodeRepository nodeRepository;
 
-        this.nodeStore = nodeStore;
+    public Context() {
+
+        this.conceptRepository = new ConceptRepository();
+        this.nodeRepository = new NodeRepository();
     }
 
-    public NodeStore nodeStore() {
+    public Context(final ConceptRepository conceptRepository, final NodeRepository nodeRepository) {
 
-        return this.nodeStore;
+        this.conceptRepository = conceptRepository;
+        this.nodeRepository = nodeRepository;
+    }
+
+    public ConceptRepository conceptRepository() {
+
+        return this.conceptRepository;
+    }
+
+    public NodeRepository nodeRepository() {
+
+        return this.nodeRepository;
     }
 }

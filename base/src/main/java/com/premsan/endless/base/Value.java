@@ -18,7 +18,7 @@ package com.premsan.endless.base;
 import java.io.Serializable;
 import java.util.Objects;
 
-public final class Value<T extends Serializable> implements Serializable {
+public class Value<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
@@ -42,5 +42,9 @@ public final class Value<T extends Serializable> implements Serializable {
     public T value() {
 
         return value;
+    }
+
+    public <C> C value(final Class<C> type) {
+        return type.cast(this.value);
     }
 }

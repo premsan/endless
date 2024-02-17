@@ -23,13 +23,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public final class Node implements Serializable {
+public class Node implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final UUID id;
-
     private final Concept concept;
+
+    private final UUID id;
 
     private final Map<Node, String> parents;
 
@@ -67,11 +67,13 @@ public final class Node implements Serializable {
         return this.parents;
     }
 
-    public void setProperty(final String name, final Value<?> value) {
+    public synchronized void setProperty(final String name, final Value<?> value) {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(value, "value must not be null");
 
+        Value<?> value0 = this.properties.get(name);
         this.properties.put(name, value);
+        this.oldProperties.put(value0, name);
     }
 
     public Map<String, Value<?>> getProperties() {
@@ -85,7 +87,7 @@ public final class Node implements Serializable {
         return this.properties.get(name);
     }
 
-    void addChild(final Node child) {
+    synchronized void addChild(final Node child) {
 
         this.children.add(child);
     }
@@ -93,5 +95,47 @@ public final class Node implements Serializable {
     Set<Node> getChildren() {
 
         return this.children;
+    }
+
+    public static class Builder {
+
+        private UUID id;
+
+        private Concept concept;
+
+        private final Map<Node, String> parents = new HashMap<>();
+
+        public Builder id(final UUID id) {
+            Objects.requireNonNull(id, "id must not be null");
+
+            this.id = id;
+
+            return this;
+        }
+
+        public Builder concept(final Concept concept) {
+            Objects.requireNonNull(concept, "concept must not be null");
+
+            this.concept = concept;
+
+            return this;
+        }
+
+        public Builder addParent(final Node parent, final String role) {
+            Objects.requireNonNull(parent, "parent must not be null");
+            Objects.requireNonNull(role, "role must not be null");
+
+            this.parents.put(parent, role);
+
+            return this;
+        }
+
+        public Node build() {
+
+            if (this.id == null) {
+                this.id = UUID.randomUUID();
+            }
+            return new Node(this.id, this.concept, this.parents);
+        }
     }
 }

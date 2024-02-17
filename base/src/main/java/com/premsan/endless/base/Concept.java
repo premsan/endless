@@ -25,7 +25,7 @@ public final class Concept implements Serializable {
 
     private final String id;
 
-    private final Set<Node> nodes = new HashSet<>();
+    private final Set<Node> nodeSet = new HashSet<>();
 
     Concept(final String id) {
 
@@ -37,13 +37,13 @@ public final class Concept implements Serializable {
         return this.id;
     }
 
-    void addNode(final Node node) {
+    synchronized void addNode(final Node node) {
 
-        this.nodes.add(node);
+        this.nodeSet.add(node);
     }
 
     public Set<Node> getNodes() {
 
-        return this.nodes;
+        return this.nodeSet;
     }
 }
