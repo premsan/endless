@@ -49,8 +49,8 @@ class FilePersistenceTest {
         final FileBootstrap fileBootstrap = new FileBootstrap(file);
         final Context context = fileBootstrap.bootstrap();
 
-        Assertions.assertEquals(parentId, context.nodeStore().find(parentId).getId());
-        Assertions.assertEquals(2, context.nodeStore().find(parentId).getChildren().size());
+        Assertions.assertEquals(parentId, context.nodeRepository().find(parentId).getId());
+        Assertions.assertEquals(2, context.nodeRepository().find(parentId).getChildren().size());
 
         file.deleteOnExit();
     }

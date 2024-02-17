@@ -28,7 +28,7 @@ public class FileBootstrap {
 
     public FileBootstrap(final File bootstrapFile) {
 
-        this.context = new Context(new NodeStore());
+        this.context = new Context(new ConceptRepository(), new NodeRepository());
 
         this.bootstrapFile = bootstrapFile;
     }
@@ -45,7 +45,7 @@ public class FileBootstrap {
 
                 try {
 
-                    context.nodeStore().load((Node) objectInputStream.readObject());
+                    context.nodeRepository().save((Node) objectInputStream.readObject());
 
                 } catch (EOFException eofException) {
 
