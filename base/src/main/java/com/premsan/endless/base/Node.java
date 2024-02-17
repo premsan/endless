@@ -33,9 +33,9 @@ public class Node implements Serializable {
 
     private final Map<Node, String> parents;
 
-    private final Map<String, Value<?>> properties = new HashMap<>();
+    private final Map<String, Property<?>> properties = new HashMap<>();
 
-    private final Map<Value<?>, String> oldProperties = new HashMap<>();
+    private final Set<Property<?>> exProperties = new HashSet<>();
 
     private final Set<Node> children = new HashSet<>();
 
@@ -67,21 +67,28 @@ public class Node implements Serializable {
         return this.parents;
     }
 
-    public synchronized void setProperty(final String name, final Value<?> value) {
-        Objects.requireNonNull(name, "name must not be null");
-        Objects.requireNonNull(value, "value must not be null");
+    public Set<Property<?>> getExProperties() {
 
-        Value<?> value0 = this.properties.get(name);
-        this.properties.put(name, value);
-        this.oldProperties.put(value0, name);
+        return this.exProperties;
     }
 
-    public Map<String, Value<?>> getProperties() {
+    public synchronized void setProperty(final Property<?> property) {
+        Objects.requireNonNull(property, "property must not be null");
+
+        Property<?> property0 = this.properties.get(property.getName());
+        this.properties.put(property.getName(), property);
+
+        if (property0 != null) {
+            this.exProperties.add(property0);
+        }
+    }
+
+    public Map<String, Property<?>> getProperties() {
 
         return this.properties;
     }
 
-    public Value<?> getProperty(final String name) {
+    public Property<?> getProperty(final String name) {
         Objects.requireNonNull(name, "name must not be null");
 
         return this.properties.get(name);

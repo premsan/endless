@@ -18,33 +18,52 @@ package com.premsan.endless.base;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Value<T extends Serializable> implements Serializable {
+public class Property<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-    private final Class<T> type;
+    private final Node node;
+
+    private final String name;
+
+    private final Class<T> dataType;
 
     private final T value;
 
-    public Value(final Class<T> type, final T value) {
-        Objects.requireNonNull(type, "type must not be null");
+    public Property(final Node node, final String name, final Class<T> dataType, final T value) {
+        Objects.requireNonNull(node, "node must not be null");
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(dataType, "type must not be null");
         Objects.requireNonNull(value, "value must not be null");
 
-        this.type = type;
+        this.node = node;
+        this.name = name;
+        this.dataType = dataType;
         this.value = value;
     }
 
-    public Class<T> type() {
+    public Node getNode() {
 
-        return type;
+        return this.node;
     }
 
-    public T value() {
+    public Class<T> getDataType() {
 
-        return value;
+        return this.dataType;
     }
 
-    public <C> C value(final Class<C> type) {
+    public String getName() {
+
+        return this.name;
+    }
+
+    public T getValue() {
+
+        return this.value;
+    }
+
+    public <C> C getValue(final Class<C> type) {
+
         return type.cast(this.value);
     }
 }

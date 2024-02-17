@@ -16,20 +16,29 @@
 package com.premsan.endless.base;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.UUID;
 
-public final class Concept implements Serializable {
+public class SerialProperty implements Serial {
 
-    private static final long serialVersionUID = 3L;
+    private final UUID nodeId;
 
     private final String name;
 
-    private final Set<Node> nodeSet = new HashSet<>();
+    private final Class<?> dataType;
 
-    Concept(final String name) {
+    private final Serializable value;
 
-        this.name = name;
+    public SerialProperty(final Property<?> property) {
+
+        this.nodeId = property.getNode().getId();
+        this.name = property.getName();
+        this.dataType = property.getDataType();
+        this.value = property.getValue();
+    }
+
+    public UUID getNodeId() {
+
+        return this.nodeId;
     }
 
     public String getName() {
@@ -37,13 +46,13 @@ public final class Concept implements Serializable {
         return this.name;
     }
 
-    synchronized void addNode(final Node node) {
+    public Class<?> getDataType() {
 
-        this.nodeSet.add(node);
+        return this.dataType;
     }
 
-    public Set<Node> getNodes() {
+    public Serializable getValue() {
 
-        return this.nodeSet;
+        return this.value;
     }
 }

@@ -15,20 +15,17 @@
  */
 package com.premsan.endless.base;
 
-import java.util.HashMap;
-import java.util.Map;
+public class SerialConcept implements Serial {
 
-public class ConceptRepository {
+    private final String name;
 
-    private final Map<String, Concept> conceptMap = new HashMap<>();
+    public SerialConcept(final Concept concept) {
 
-    public synchronized void save(final Concept concept) {
-
-        this.conceptMap.put(concept.getName(), concept);
+        this.name = concept.getName();
     }
 
-    public Concept find(final String name) {
+    public String getName() {
 
-        return this.conceptMap.get(name);
+        return this.name;
     }
 }

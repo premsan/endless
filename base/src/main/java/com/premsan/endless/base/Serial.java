@@ -15,20 +15,14 @@
  */
 package com.premsan.endless.base;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.io.Serializable;
 
-public class ConceptRepository {
-
-    private final Map<String, Concept> conceptMap = new HashMap<>();
-
-    public synchronized void save(final Concept concept) {
-
-        this.conceptMap.put(concept.getName(), concept);
-    }
-
-    public Concept find(final String name) {
-
-        return this.conceptMap.get(name);
-    }
-}
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = SerialConcept.class, name = "CONCEPT"),
+    @JsonSubTypes.Type(value = SerialNode.class, name = "NODE"),
+    @JsonSubTypes.Type(value = SerialProperty.class, name = "PROPERTY")
+})
+public interface Serial extends Serializable {}

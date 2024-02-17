@@ -19,15 +19,15 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ValueTest {
+public class PropertyTest {
 
     @Test
     public void testValueConstructor() {
 
-        final Value<LocalDate> dateValue =
-                new Value<>(LocalDate.class, LocalDate.parse("2024-05-02"));
+        final Property<LocalDate> dateProperty =
+                new Property<>(null, "date", LocalDate.class, LocalDate.parse("2024-05-02"));
 
-        Assertions.assertEquals(LocalDate.class, dateValue.type());
-        Assertions.assertEquals(LocalDate.parse("2024-05-02"), dateValue.value());
+        Assertions.assertEquals(LocalDate.class, dateProperty.getDataType());
+        Assertions.assertEquals(LocalDate.parse("2024-05-02"), dateProperty.getValue());
     }
 }
