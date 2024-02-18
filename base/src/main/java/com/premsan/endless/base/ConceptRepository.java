@@ -23,16 +23,30 @@ public class ConceptRepository {
 
     private final Map<String, Concept> conceptMap = new HashMap<>();
 
+    private SerialChannel serialChannel;
+
+    public ConceptRepository() {}
+
+    public ConceptRepository(final SerialChannel serialChannel) {
+
+        this.serialChannel = serialChannel;
+    }
+
     public synchronized void save(final Concept concept) {
 
         this.conceptMap.put(concept.getName(), concept);
-    }
 
-    public void save(final Concept concept, final SerialChannel serialChannel) throws IOException {
+        if (serialChannel != null) {
 
-        save(concept);
+            try {
 
-        serialChannel.write(concept);
+                serialChannel.write(concept);
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public Concept find(final String name) {

@@ -25,17 +25,31 @@ public class NodeRepository {
 
     private final Map<UUID, Node> nodeMap = new HashMap<>();
 
+    private SerialChannel serialChannel;
+
+    public NodeRepository() {}
+
+    public NodeRepository(final SerialChannel serialChannel) {
+
+        this.serialChannel = serialChannel;
+    }
+
     public synchronized void save(final Node node) {
         Objects.requireNonNull(node, "node must not be null");
 
         this.nodeMap.put(node.getId(), node);
-    }
 
-    public void save(final Node node, final SerialChannel serialChannel) throws IOException {
+        if (serialChannel != null) {
 
-        save(node);
+            try {
 
-        serialChannel.write(node);
+                serialChannel.write(node);
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public Node find(final UUID id) {

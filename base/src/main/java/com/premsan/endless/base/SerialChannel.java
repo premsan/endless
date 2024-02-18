@@ -22,7 +22,7 @@ import java.nio.channels.WritableByteChannel;
 
 public abstract class SerialChannel implements WritableByteChannel {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapperFactory().get();
 
     public int write(final Concept concept) throws IOException {
 

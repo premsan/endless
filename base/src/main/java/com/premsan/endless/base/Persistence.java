@@ -15,21 +15,15 @@
  */
 package com.premsan.endless.base;
 
-import java.time.LocalDate;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+public interface Persistence {
 
-public class PropertyTest {
+    void persist(final Serial serial) throws PersistenceException;
 
-    @Test
-    @Disabled
-    public void testValueConstructor() {
+    class PersistenceException extends Exception {
 
-        final Property<LocalDate> dateProperty =
-                new Property<>(null, "date", LocalDate.class, LocalDate.parse("2024-05-02"));
+        public PersistenceException(Throwable cause) {
 
-        Assertions.assertEquals(LocalDate.class, dateProperty.getDataType());
-        Assertions.assertEquals(LocalDate.parse("2024-05-02"), dateProperty.getValue());
+            super(cause);
+        }
     }
 }
