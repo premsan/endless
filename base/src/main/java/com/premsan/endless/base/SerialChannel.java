@@ -24,18 +24,18 @@ public abstract class SerialChannel implements WritableByteChannel {
 
     private final ObjectMapper objectMapper = new ObjectMapperFactory().get();
 
-    public int write(final Concept concept) throws IOException {
+    public void write(final Concept concept) throws IOException {
 
-        return write(ByteBuffer.wrap(objectMapper.writeValueAsBytes(new SerialConcept(concept))));
+        write(ByteBuffer.wrap(objectMapper.writeValueAsBytes(new SerialConcept(concept))));
     }
 
-    public int write(final Node node) throws IOException {
+    public void write(final Node node) throws IOException {
 
-        return write(ByteBuffer.wrap(objectMapper.writeValueAsBytes(new SerialNode(node))));
+        write(ByteBuffer.wrap(objectMapper.writeValueAsBytes(new SerialNode(node))));
     }
 
-    public int write(final Property<?> property) throws IOException {
+    public void write(final Property<?> property) throws IOException {
 
-        return write(ByteBuffer.wrap(objectMapper.writeValueAsBytes(new SerialProperty(property))));
+        write(ByteBuffer.wrap(objectMapper.writeValueAsBytes(new SerialProperty(property))));
     }
 }

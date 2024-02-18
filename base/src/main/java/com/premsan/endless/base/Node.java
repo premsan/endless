@@ -23,13 +23,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Node implements Serializable {
+public class Node implements Construct, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Concept concept;
-
     private final UUID id;
+
+    private final long ts;
+
+    private final Concept concept;
 
     private final Map<Node, String> parents;
 
@@ -39,9 +41,12 @@ public class Node implements Serializable {
 
     private final Set<Node> children = new HashSet<>();
 
-    Node(final UUID id, final Concept concept, final Map<Node, String> parents) {
+    private Node(
+            final UUID id, final long ts, final Concept concept, final Map<Node, String> parents) {
 
         this.id = id;
+
+        this.ts = ts;
 
         this.concept = concept;
         this.concept.addNode(this);
@@ -52,9 +57,16 @@ public class Node implements Serializable {
         }
     }
 
+    @Override
     public UUID getId() {
 
         return this.id;
+    }
+
+    @Override
+    public long getTs() {
+
+        return this.ts;
     }
 
     public Concept getConcept() {
@@ -108,6 +120,8 @@ public class Node implements Serializable {
 
         private UUID id;
 
+        private long ts;
+
         private Concept concept;
 
         private final Map<Node, String> parents = new HashMap<>();
@@ -116,6 +130,14 @@ public class Node implements Serializable {
             Objects.requireNonNull(id, "id must not be null");
 
             this.id = id;
+
+            return this;
+        }
+
+        public Builder ts(final long ts) {
+            Objects.requireNonNull(ts, "ts must not be null");
+
+            this.ts = ts;
 
             return this;
         }
@@ -139,10 +161,7 @@ public class Node implements Serializable {
 
         public Node build() {
 
-            if (this.id == null) {
-                this.id = UUID.randomUUID();
-            }
-            return new Node(this.id, this.concept, this.parents);
+            return new Node(this.id, this.ts, this.concept, this.parents);
         }
     }
 }

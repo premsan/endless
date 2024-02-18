@@ -15,28 +15,39 @@
  */
 package com.premsan.endless.base;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
-public class FilePersistence {
+public class FilePersistence implements Persistence {
 
-    private final ObjectOutputStream objectOutputStream;
+    private final ObjectMapper objectMapper = new ObjectMapperFactory().get();
+
+    private final BufferedWriter writer;
 
     public FilePersistence(final File file) throws IOException {
 
-        final FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-        this.objectOutputStream = new ObjectOutputStream(fileOutputStream);
-    }
-
-    public void persist(final Node node) throws IOException {
-
-        this.objectOutputStream.writeObject(node);
+        this.writer = new BufferedWriter(new FileWriter(file, true));
     }
 
     public void close() throws IOException {
 
-        this.objectOutputStream.close();
+        this.writer.close();
+    }
+
+    @Override
+    public void persist(Serial serial) throws PersistenceException {
+
+        try {
+
+            this.writer.write(objectMapper.writeValueAsString(serial));
+            this.writer.newLine();
+
+        } catch (IOException e) {
+
+            throw new PersistenceException(e);
+        }
     }
 }

@@ -18,6 +18,7 @@ package com.premsan.endless.base;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ConceptRepository {
 
@@ -32,7 +33,10 @@ public class ConceptRepository {
         this.serialChannel = serialChannel;
     }
 
-    public synchronized void save(final Concept concept) {
+    public synchronized Concept add(final Concept.Builder conceptBuilder) {
+
+        final Concept concept =
+                conceptBuilder.id(UUID.randomUUID()).ts(System.currentTimeMillis()).build();
 
         this.conceptMap.put(concept.getName(), concept);
 
@@ -47,10 +51,24 @@ public class ConceptRepository {
                 throw new RuntimeException(e);
             }
         }
+
+        return concept;
     }
 
     public Concept find(final String name) {
 
         return this.conceptMap.get(name);
+    }
+
+    public void load(final SerialConcept serialConcept) {
+
+        final Concept concept =
+                new Concept.Builder()
+                        .id(serialConcept.getId())
+                        .ts(serialConcept.getTs())
+                        .name(serialConcept.getName())
+                        .build();
+
+        this.conceptMap.put(concept.getName(), concept);
     }
 }

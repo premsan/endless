@@ -16,6 +16,7 @@
 package com.premsan.endless.base;
 
 import java.time.LocalDate;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,12 @@ public class PropertyTest {
     public void testValueConstructor() {
 
         final Property<LocalDate> dateProperty =
-                new Property<>(null, "date", LocalDate.class, LocalDate.parse("2024-05-02"));
+                new Property.Builder<LocalDate>()
+                        .id(UUID.randomUUID())
+                        .ts(System.currentTimeMillis())
+                        .dataType(LocalDate.class)
+                        .value(LocalDate.parse("2024-05-02"))
+                        .build();
 
         Assertions.assertEquals(LocalDate.class, dateProperty.getDataType());
         Assertions.assertEquals(LocalDate.parse("2024-05-02"), dateProperty.getValue());

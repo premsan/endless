@@ -19,19 +19,39 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
-public final class Concept implements Serializable {
+public final class Concept implements Construct, Serializable {
 
     private static final long serialVersionUID = 3L;
+
+    private final UUID id;
+
+    private final long ts;
 
     private final String name;
 
     private final Set<Node> nodeSet = new HashSet<>();
 
-    public Concept(final String name) {
-        Objects.requireNonNull(name, "name must not be null");
+    private Concept(final UUID id, final long ts, final String name) {
+
+        this.id = id;
+
+        this.ts = ts;
 
         this.name = name;
+    }
+
+    @Override
+    public UUID getId() {
+
+        return this.id;
+    }
+
+    @Override
+    public long getTs() {
+
+        return this.ts;
     }
 
     public String getName() {
@@ -47,5 +67,41 @@ public final class Concept implements Serializable {
     public Set<Node> getNodes() {
 
         return this.nodeSet;
+    }
+
+    public static class Builder {
+
+        private UUID id;
+
+        private long ts;
+
+        private String name;
+
+        public Builder id(final UUID id) {
+            Objects.requireNonNull(id, "id must not be null");
+
+            this.id = id;
+
+            return this;
+        }
+
+        public Builder ts(final long ts) {
+
+            this.ts = ts;
+
+            return this;
+        }
+
+        public Builder name(final String name) {
+
+            this.name = name;
+
+            return this;
+        }
+
+        public Concept build() {
+
+            return new Concept(this.id, this.ts, this.name);
+        }
     }
 }

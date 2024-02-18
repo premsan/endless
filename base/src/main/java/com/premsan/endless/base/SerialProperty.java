@@ -20,6 +20,10 @@ import java.util.UUID;
 
 public class SerialProperty implements Serial {
 
+    private final UUID id;
+
+    private final long ts;
+
     private final UUID nodeId;
 
     private final String name;
@@ -30,10 +34,29 @@ public class SerialProperty implements Serial {
 
     public SerialProperty(final Property<?> property) {
 
+        this.id = property.getId();
+
+        this.ts = property.getTs();
+
         this.nodeId = property.getNode().getId();
+
         this.name = property.getName();
+
         this.dataType = property.getDataType();
+
         this.value = property.getValue();
+    }
+
+    @Override
+    public UUID getId() {
+
+        return this.id;
+    }
+
+    @Override
+    public long getTs() {
+
+        return this.ts;
     }
 
     public UUID getNodeId() {

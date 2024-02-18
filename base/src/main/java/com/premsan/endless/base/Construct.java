@@ -17,37 +17,9 @@ package com.premsan.endless.base;
 
 import java.util.UUID;
 
-public class SerialConcept implements Serial {
+public interface Construct {
 
-    private final UUID id;
+    UUID getId();
 
-    private final long ts;
-
-    private final String name;
-
-    public SerialConcept(final Concept concept) {
-
-        this.id = concept.getId();
-
-        this.ts = concept.getTs();
-
-        this.name = concept.getName();
-    }
-
-    @Override
-    public UUID getId() {
-
-        return this.id;
-    }
-
-    @Override
-    public long getTs() {
-
-        return this.ts;
-    }
-
-    public String getName() {
-
-        return this.name;
-    }
+    long getTs();
 }

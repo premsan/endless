@@ -21,31 +21,45 @@ import java.util.UUID;
 
 public class SerialNode implements Serial {
 
-    private final String conceptName;
+    private UUID id;
 
-    private final UUID id;
+    private long ts;
+
+    private String conceptName;
 
     private final Map<UUID, String> parents = new HashMap<>();
 
+    private SerialNode() {}
+
     public SerialNode(final Node node) {
 
-        this.conceptName = node.getConcept().getName();
         this.id = node.getId();
 
-        for (Map.Entry<Node, String> parentEntry : node.getParents().entrySet()) {
+        this.ts = node.getTs();
+
+        this.conceptName = node.getConcept().getName();
+
+        for (final Map.Entry<Node, String> parentEntry : node.getParents().entrySet()) {
 
             parents.put(parentEntry.getKey().getId(), parentEntry.getValue());
         }
     }
 
-    public String getConceptName() {
-
-        return this.conceptName;
-    }
-
+    @Override
     public UUID getId() {
 
         return this.id;
+    }
+
+    @Override
+    public long getTs() {
+
+        return this.ts;
+    }
+
+    public String getConceptName() {
+
+        return this.conceptName;
     }
 
     public Map<UUID, String> getParents() {
