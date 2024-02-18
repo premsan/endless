@@ -15,6 +15,7 @@
  */
 package com.premsan.endless.base;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,13 @@ public class NodeRepository {
         Objects.requireNonNull(node, "node must not be null");
 
         this.nodeMap.put(node.getId(), node);
+    }
+
+    public void save(final Node node, final SerialChannel serialChannel) throws IOException {
+
+        save(node);
+
+        serialChannel.write(node);
     }
 
     public Node find(final UUID id) {

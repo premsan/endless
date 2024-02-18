@@ -17,6 +17,7 @@ package com.premsan.endless.base;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public final class Concept implements Serializable {
@@ -27,7 +28,8 @@ public final class Concept implements Serializable {
 
     private final Set<Node> nodeSet = new HashSet<>();
 
-    Concept(final String name) {
+    public Concept(final String name) {
+        Objects.requireNonNull(name, "name must not be null");
 
         this.name = name;
     }

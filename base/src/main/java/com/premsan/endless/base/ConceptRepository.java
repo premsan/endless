@@ -15,6 +15,7 @@
  */
 package com.premsan.endless.base;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,13 @@ public class ConceptRepository {
     public synchronized void save(final Concept concept) {
 
         this.conceptMap.put(concept.getName(), concept);
+    }
+
+    public void save(final Concept concept, final SerialChannel serialChannel) throws IOException {
+
+        save(concept);
+
+        serialChannel.write(concept);
     }
 
     public Concept find(final String name) {
