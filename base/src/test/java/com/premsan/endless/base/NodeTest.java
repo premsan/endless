@@ -17,17 +17,16 @@ package com.premsan.endless.base;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 public class NodeTest {
 
-    public Context context = new Context(new ConceptRepository(), new NodeRepository());
+    public Context context = new Context();
 
     @Test
     public void multiThreadNodeCreation() {
 
-        context.conceptRepository().save(new Concept("booking"));
+        context.conceptRepository().add(new Concept.Builder().name("booking"));
 
         final List<Thread> nodeThreads = new ArrayList<>();
 
@@ -36,16 +35,13 @@ public class NodeTest {
             nodeThreads.add(
                     new Thread(
                             () -> {
-                                UUID uuid = UUID.randomUUID();
-
                                 Node.Builder builder =
                                         new Node.Builder()
-                                                .id(uuid)
                                                 .concept(
                                                         context.conceptRepository()
                                                                 .find("booking"));
 
-                                context.nodeRepository().save(builder.build());
+                                context.nodeRepository().add(builder);
                             }));
         }
 

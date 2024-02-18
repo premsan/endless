@@ -15,20 +15,60 @@
  */
 package com.premsan.endless.base;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ConceptRepository {
 
     private final Map<String, Concept> conceptMap = new HashMap<>();
 
-    public synchronized void save(final Concept concept) {
+    private SerialChannel serialChannel;
 
-        this.conceptMap.put(concept.getId(), concept);
+    public ConceptRepository() {}
+
+    public ConceptRepository(final SerialChannel serialChannel) {
+
+        this.serialChannel = serialChannel;
     }
 
-    public Concept find(final String id) {
+    public synchronized Concept add(final Concept.Builder conceptBuilder) {
 
-        return this.conceptMap.get(id);
+        final Concept concept =
+                conceptBuilder.id(UUID.randomUUID()).ts(System.currentTimeMillis()).build();
+
+        this.conceptMap.put(concept.getName(), concept);
+
+        if (serialChannel != null) {
+
+            try {
+
+                serialChannel.write(concept);
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(e);
+            }
+        }
+
+        return concept;
+    }
+
+    public Concept find(final String name) {
+
+        return this.conceptMap.get(name);
+    }
+
+    public void load(final SerialConcept serialConcept) {
+
+        final Concept concept =
+                new Concept.Builder()
+                        .id(serialConcept.getId())
+                        .ts(serialConcept.getTs())
+                        .name(serialConcept.getName())
+                        .build();
+
+        this.conceptMap.put(concept.getName(), concept);
     }
 }

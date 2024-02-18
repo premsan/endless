@@ -15,36 +15,39 @@
  */
 package com.premsan.endless.base;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.util.UUID;
 
-public class Value<T extends Serializable> implements Serializable {
+public class SerialConcept implements Serial {
 
-    private static final long serialVersionUID = 2L;
+    private final UUID id;
 
-    private final Class<T> type;
+    private final long ts;
 
-    private final T value;
+    private final String name;
 
-    public Value(final Class<T> type, final T value) {
-        Objects.requireNonNull(type, "type must not be null");
-        Objects.requireNonNull(value, "value must not be null");
+    public SerialConcept(final Concept concept) {
 
-        this.type = type;
-        this.value = value;
+        this.id = concept.getId();
+
+        this.ts = concept.getTs();
+
+        this.name = concept.getName();
     }
 
-    public Class<T> type() {
+    @Override
+    public UUID getId() {
 
-        return type;
+        return this.id;
     }
 
-    public T value() {
+    @Override
+    public long getTs() {
 
-        return value;
+        return this.ts;
     }
 
-    public <C> C value(final Class<C> type) {
-        return type.cast(this.value);
+    public String getName() {
+
+        return this.name;
     }
 }

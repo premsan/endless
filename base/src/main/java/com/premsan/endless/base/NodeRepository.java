@@ -15,6 +15,7 @@
  */
 package com.premsan.endless.base;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,10 +25,41 @@ public class NodeRepository {
 
     private final Map<UUID, Node> nodeMap = new HashMap<>();
 
-    public synchronized void save(final Node node) {
-        Objects.requireNonNull(node, "node must not be null");
+    private final ConceptRepository conceptRepository;
+    private SerialChannel serialChannel;
+
+    public NodeRepository(final ConceptRepository conceptRepository) {
+
+        this.conceptRepository = conceptRepository;
+    }
+
+    public NodeRepository(
+            final ConceptRepository conceptRepository, final SerialChannel serialChannel) {
+
+        this.conceptRepository = conceptRepository;
+        this.serialChannel = serialChannel;
+    }
+
+    public synchronized Node add(final Node.Builder nodeBuilder) {
+        Objects.requireNonNull(nodeBuilder, "node must not be null");
+
+        final Node node = nodeBuilder.id(UUID.randomUUID()).ts(System.currentTimeMillis()).build();
 
         this.nodeMap.put(node.getId(), node);
+
+        if (serialChannel != null) {
+
+            try {
+
+                serialChannel.write(node);
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(e);
+            }
+        }
+
+        return node;
     }
 
     public Node find(final UUID id) {
@@ -37,6 +69,24 @@ public class NodeRepository {
     }
 
     Map<UUID, Node> nodeMap() {
+
         return this.nodeMap;
+    }
+
+    public void load(final SerialNode serialNode) {
+
+        final Concept concept = conceptRepository.find(serialNode.getConceptName());
+
+        final Node.Builder builder =
+                new Node.Builder().id(serialNode.getId()).ts(serialNode.getTs()).concept(concept);
+
+        for (final Map.Entry<UUID, String> entry : serialNode.getParents().entrySet()) {
+
+            builder.addParent(find(entry.getKey()), entry.getValue());
+        }
+
+        final Node node = builder.build();
+
+        this.nodeMap.put(node.getId(), node);
     }
 }

@@ -15,19 +15,14 @@
  */
 package com.premsan.endless.base;
 
-import java.time.LocalDate;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.function.Supplier;
 
-public class ValueTest {
+public class ObjectMapperFactory implements Supplier<ObjectMapper> {
 
-    @Test
-    public void testValueConstructor() {
+    @Override
+    public ObjectMapper get() {
 
-        final Value<LocalDate> dateValue =
-                new Value<>(LocalDate.class, LocalDate.parse("2024-05-02"));
-
-        Assertions.assertEquals(LocalDate.class, dateValue.type());
-        Assertions.assertEquals(LocalDate.parse("2024-05-02"), dateValue.value());
+        return new ObjectMapper();
     }
 }

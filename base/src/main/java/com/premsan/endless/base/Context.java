@@ -24,12 +24,14 @@ public final class Context {
     public Context() {
 
         this.conceptRepository = new ConceptRepository();
-        this.nodeRepository = new NodeRepository();
+
+        this.nodeRepository = new NodeRepository(this.conceptRepository);
     }
 
     public Context(final ConceptRepository conceptRepository, final NodeRepository nodeRepository) {
 
         this.conceptRepository = conceptRepository;
+
         this.nodeRepository = nodeRepository;
     }
 

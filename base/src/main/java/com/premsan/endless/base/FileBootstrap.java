@@ -15,55 +15,39 @@
  */
 package com.premsan.endless.base;
 
-import java.io.EOFException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 public class FileBootstrap {
 
-    private final Context context;
+    private final ObjectMapper objectMapper = new ObjectMapperFactory().get();
+
+    private final Context context = new Context();
     private final File bootstrapFile;
 
     public FileBootstrap(final File bootstrapFile) {
 
-        this.context = new Context(new ConceptRepository(), new NodeRepository());
-
         this.bootstrapFile = bootstrapFile;
     }
 
-    public Context bootstrap() throws IOException, ClassNotFoundException {
+    public Context bootstrap() throws IOException {
 
-        ClassNotFoundException classNotFoundException = null;
-
-        try (final FileInputStream bootstrapFileInputStream = new FileInputStream(bootstrapFile);
-                final ObjectInputStream objectInputStream =
-                        new ObjectInputStream(bootstrapFileInputStream)) {
+        try (BufferedReader br = new BufferedReader(new FileReader((bootstrapFile)))) {
 
             while (true) {
 
-                try {
+                final String line = br.readLine();
 
-                    context.nodeRepository().save((Node) objectInputStream.readObject());
-
-                } catch (EOFException eofException) {
-
-                    break;
-                } catch (ClassNotFoundException classNotFoundException1) {
-
-                    classNotFoundException = classNotFoundException1;
+                if (line == null) {
 
                     break;
                 }
+                context.nodeRepository().load(objectMapper.readValue(line, SerialNode.class));
             }
         }
-
-        if (classNotFoundException != null) {
-
-            throw classNotFoundException;
-        }
-
         return context;
     }
 }
