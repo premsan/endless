@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":base"))
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+    implementation("io.netty:netty-all:4.1.107.Final")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
