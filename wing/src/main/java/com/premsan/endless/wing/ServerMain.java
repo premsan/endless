@@ -22,10 +22,10 @@ import io.netty.handler.logging.LoggingHandler;
 
 public final class ServerMain {
 
-    private final Context context = new Context();
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     public static void main(String[] args) throws Exception {
+
+        final Context context = new Context();
+        final ObjectMapper objectMapper = new ObjectMapper();
 
         final EventLoopGroup parentGroup = new NioEventLoopGroup(1);
         final EventLoopGroup childGroup = new NioEventLoopGroup();
@@ -44,7 +44,7 @@ public final class ServerMain {
                                     p.addLast(new HttpRequestDecoder());
                                     p.addLast(new HttpResponseEncoder());
                                     p.addLast(new HttpObjectAggregator(Short.MAX_VALUE));
-                                    p.addLast(new InboundChannelHandler());
+                                    p.addLast(new InboundChannelHandler(context, objectMapper));
                                 }
                             });
 

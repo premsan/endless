@@ -4,32 +4,35 @@
  */
 package com.premsan.endless.wing;
 
-import io.netty.buffer.ByteBuf;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.premsan.endless.base.Context;
+import com.premsan.endless.wing.handler.CreateConceptRequestHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpVersion;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InboundChannelHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+
+    private final Set<FullHttpRequestHandler> requestHandlers = new HashSet<>();
+
+    public InboundChannelHandler(final Context context, final ObjectMapper objectMapper) {
+
+        this.requestHandlers.add(new CreateConceptRequestHandler(context, objectMapper));
+    }
+
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) {
+    protected void channelRead0(
+            ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
+            throws IOException {
 
-        // Send response back so the browser won't timeout
-        ByteBuf responseBytes = ctx.alloc().buffer();
-        responseBytes.writeBytes("Hello World".getBytes());
+        for (final FullHttpRequestHandler requestHandler : requestHandlers) {
+            if (requestHandler.handles(fullHttpRequest)) {
 
-        FullHttpResponse response =
-                new DefaultFullHttpResponse(
-                        HttpVersion.HTTP_1_1, HttpResponseStatus.OK, responseBytes);
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain");
-        response.headers()
-                .set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
-
-        response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-        ctx.writeAndFlush(response);
+                requestHandler.handle(channelHandlerContext, fullHttpRequest);
+            }
+        }
     }
 }
