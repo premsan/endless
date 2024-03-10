@@ -15,15 +15,42 @@
  */
 package com.premsan.endless.base;
 
-public interface Persistence {
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-    void persist(final Serial serial) throws PersistenceException;
+public abstract class Persistence implements Runnable {
 
-    class PersistenceException extends Exception {
+    protected final ObjectMapper objectMapper = new ObjectMapperFactory().get();
+
+    protected ConcurrentLinkedQueue<Serial> serials = new ConcurrentLinkedQueue<>();
+
+    public void write(final Serial serial) {
+
+        serials.offer(serial);
+    }
+
+    abstract void persist(Serial serial) throws PersistenceException;
+
+    public static class PersistenceException extends Exception {
 
         public PersistenceException(Throwable cause) {
 
             super(cause);
+        }
+    }
+
+    public void run() {
+
+        while (!serials.isEmpty()) {
+
+            try {
+
+                persist(serials.poll());
+
+            } catch (PersistenceException e) {
+
+                throw new RuntimeException(e);
+            }
         }
     }
 }

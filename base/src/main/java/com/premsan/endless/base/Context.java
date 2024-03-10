@@ -15,7 +15,11 @@
  */
 package com.premsan.endless.base;
 
+import java.util.ServiceLoader;
+
 public final class Context {
+
+    private Persistence persistence;
 
     private final ConceptRepository conceptRepository;
 
@@ -23,7 +27,11 @@ public final class Context {
 
     public Context() {
 
-        this.conceptRepository = new ConceptRepository();
+        for (final Persistence p : ServiceLoader.load(Persistence.class)) {
+
+            persistence = p;
+        }
+        this.conceptRepository = new ConceptRepository(persistence);
 
         this.nodeRepository = new NodeRepository(this.conceptRepository);
     }
@@ -33,6 +41,11 @@ public final class Context {
         this.conceptRepository = conceptRepository;
 
         this.nodeRepository = nodeRepository;
+    }
+
+    public Persistence persistence() {
+
+        return this.persistence;
     }
 
     public ConceptRepository conceptRepository() {

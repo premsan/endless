@@ -16,26 +16,32 @@
 package com.premsan.endless.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class JDBCPersistence implements Persistence {
+public abstract class JDBCPersistence extends Persistence {
 
     private static final String SQL = "INSERT INTO CONCEPTS value(?, ?, ?)";
 
-    private final ObjectMapper objectMapper = new ObjectMapperFactory().get();
-
     private final Connection connection;
 
-    public JDBCPersistence(final Connection connection) {
+    public JDBCPersistence() {
 
-        this.connection = connection;
+        try {
+
+            this.connection = getConnection();
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
     }
 
+    protected abstract Connection getConnection() throws SQLException;
+
     @Override
-    public void persist(final Serial serial) throws PersistenceException {
+    public void persist(Serial serial) throws PersistenceException {
 
         PreparedStatement preparedStatement = null;
         PersistenceException persistenceException = null;
