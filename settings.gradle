@@ -1,5 +1,3 @@
 include 'base'
 include 'base:postgres'
 include 'wing'
-include 'base:postgres'
-findProject(':base:postgres')?.name = 'postgres'
