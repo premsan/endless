@@ -25,7 +25,8 @@ public class InboundChannelHandler extends SimpleChannelInboundHandler<FullHttpR
 
     @Override
     protected void channelRead0(
-            ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
+            final ChannelHandlerContext channelHandlerContext,
+            final FullHttpRequest fullHttpRequest)
             throws IOException {
 
         for (final FullHttpRequestHandler requestHandler : requestHandlers) {

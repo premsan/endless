@@ -7,7 +7,6 @@ package com.premsan.endless.wing;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.premsan.endless.base.Context;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
@@ -22,6 +21,8 @@ import io.netty.handler.logging.LoggingHandler;
 
 public final class ServerMain {
 
+    static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
+
     public static void main(String[] args) throws Exception {
 
         final Context context = new Context();
@@ -30,8 +31,9 @@ public final class ServerMain {
         final EventLoopGroup parentGroup = new NioEventLoopGroup(1);
         final EventLoopGroup childGroup = new NioEventLoopGroup();
         try {
-            final ServerBootstrap b = new ServerBootstrap();
-            b.group(parentGroup, childGroup)
+            final ServerBootstrap serverBootstrap = new ServerBootstrap();
+            serverBootstrap
+                    .group(parentGroup, childGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(
@@ -48,9 +50,7 @@ public final class ServerMain {
                                 }
                             });
 
-            Channel ch = b.bind(8080).sync().channel();
-
-            ch.closeFuture().sync();
+            serverBootstrap.bind(PORT).sync().channel().closeFuture().sync();
         } finally {
             parentGroup.shutdownGracefully();
             childGroup.shutdownGracefully();
