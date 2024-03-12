@@ -15,19 +15,90 @@
  */
 package com.premsan.endless.base;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
-public class PostgresJDBCPersistence extends JDBCPersistence {
+public abstract class PostgresJDBCPersistence extends Persistence {
 
-    @Override
+    private final Connection connection;
+
+    public PostgresJDBCPersistence() {
+
+        try {
+
+            final String SQL =
+                    new BufferedReader(
+                                    new InputStreamReader(
+                                            Objects.requireNonNull(
+                                                    PostgresJDBCPersistence.class
+                                                            .getResourceAsStream(
+                                                                    "/CREATE_TABLES.sql"))))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
+
+            this.connection = getConnection();
+            Statement statement = this.connection.createStatement();
+
+            statement.execute(SQL);
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
     protected Connection getConnection() throws SQLException {
 
         String url = "jdbc:postgresql://localhost/test";
         Properties props = new Properties();
 
         return DriverManager.getConnection(url, props);
+    }
+
+    @Override
+    public void persist(Serial serial) throws PersistenceException {
+
+        PreparedStatement preparedStatement = null;
+        PersistenceException persistenceException = null;
+
+        try {
+
+            preparedStatement = connection.prepareStatement("SQL");
+
+            preparedStatement.setString(3, objectMapper.writeValueAsString(serial));
+            preparedStatement.execute();
+
+        } catch (SQLException | JsonProcessingException e) {
+
+            persistenceException = new PersistenceException(e);
+
+        } finally {
+
+            try {
+
+                if (preparedStatement != null) {
+
+                    preparedStatement.close();
+                }
+
+            } catch (SQLException e) {
+
+                persistenceException = new PersistenceException(e);
+            }
+        }
+
+        if (persistenceException != null) {
+
+            throw persistenceException;
+        }
     }
 }
