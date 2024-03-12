@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class FilePersistence implements Persistence {
+public class FilePersistence extends Persistence {
 
     private final ObjectMapper objectMapper = new ObjectMapperFactory().get();
 
@@ -38,11 +38,11 @@ public class FilePersistence implements Persistence {
     }
 
     @Override
-    public void persist(Serial serial) throws PersistenceException {
+    public void persist(Serial poll) throws PersistenceException {
 
         try {
 
-            this.writer.write(objectMapper.writeValueAsString(serial));
+            this.writer.write(objectMapper.writeValueAsString(serials.peek()));
             this.writer.newLine();
 
         } catch (IOException e) {

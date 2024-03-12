@@ -19,11 +19,11 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public final class ServerMain {
+public final class HttpServerBootstrap {
 
     static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
 
-    public static void main(String[] args) throws Exception {
+    public static void bootstrap() throws Exception {
 
         final Context context = new Context();
         final ObjectMapper objectMapper = new ObjectMapper();
