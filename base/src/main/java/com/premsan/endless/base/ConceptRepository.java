@@ -23,7 +23,7 @@ public class ConceptRepository {
 
     private final Map<String, Concept> conceptMap = new HashMap<>();
 
-    private Persistence persistence;
+    private final Persistence persistence;
 
     public ConceptRepository(final Persistence persistence) {
 

@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.premsan.endless.base;
+package com.premsan.endless.base.postgres;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.premsan.endless.base.Persistence;
+import com.premsan.endless.base.Serial;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -27,11 +29,11 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-public abstract class PostgresJDBCPersistence extends Persistence {
+public class PostgresPersistence extends Persistence {
 
     private final Connection connection;
 
-    public PostgresJDBCPersistence() {
+    public PostgresPersistence() {
 
         try {
 
@@ -39,9 +41,8 @@ public abstract class PostgresJDBCPersistence extends Persistence {
                     new BufferedReader(
                                     new InputStreamReader(
                                             Objects.requireNonNull(
-                                                    PostgresJDBCPersistence.class
-                                                            .getResourceAsStream(
-                                                                    "/CREATE_TABLES.sql"))))
+                                                    PostgresPersistence.class.getResourceAsStream(
+                                                            "/CREATE_TABLES.sql"))))
                             .lines()
                             .collect(Collectors.joining("\n"));
 
@@ -49,6 +50,8 @@ public abstract class PostgresJDBCPersistence extends Persistence {
             Statement statement = this.connection.createStatement();
 
             statement.execute(SQL);
+
+            new Thread(this).start();
 
         } catch (SQLException e) {
 
@@ -72,9 +75,8 @@ public abstract class PostgresJDBCPersistence extends Persistence {
 
         try {
 
-            preparedStatement = connection.prepareStatement("SQL");
-
-            preparedStatement.setString(3, objectMapper.writeValueAsString(serial));
+            preparedStatement = connection.prepareStatement("INSERT INTO CONCEPTS(val) VALUES(?)");
+            preparedStatement.setString(1, objectMapper.writeValueAsString(serial));
             preparedStatement.execute();
 
         } catch (SQLException | JsonProcessingException e) {

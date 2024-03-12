@@ -29,7 +29,7 @@ public abstract class Persistence implements Runnable {
         serials.offer(serial);
     }
 
-    abstract void persist(Serial serial) throws PersistenceException;
+    protected abstract void persist(Serial serial) throws PersistenceException;
 
     public static class PersistenceException extends Exception {
 
@@ -41,11 +41,14 @@ public abstract class Persistence implements Runnable {
 
     public void run() {
 
-        while (!serials.isEmpty()) {
+        while (true) {
 
             try {
 
-                persist(serials.poll());
+                if (!serials.isEmpty()) {
+
+                    persist(serials.poll());
+                }
 
             } catch (PersistenceException e) {
 
