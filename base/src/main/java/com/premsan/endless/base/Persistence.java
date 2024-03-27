@@ -22,7 +22,7 @@ public abstract class Persistence implements Runnable {
 
     protected final ObjectMapper objectMapper = new ObjectMapperFactory().get();
 
-    protected ConcurrentLinkedQueue<Serial> serials = new ConcurrentLinkedQueue<>();
+    protected final ConcurrentLinkedQueue<Serial> serials = new ConcurrentLinkedQueue<>();
 
     public void write(final Serial serial) {
 

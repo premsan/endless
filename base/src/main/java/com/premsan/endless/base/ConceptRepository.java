@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class ConceptRepository {
 
-    private final Map<String, Concept> conceptMap = new HashMap<>();
+    private final Map<UUID, Concept> conceptMap = new HashMap<>();
 
     private final Persistence persistence;
 
@@ -33,9 +33,12 @@ public class ConceptRepository {
     public synchronized Concept add(final Concept.Builder conceptBuilder) {
 
         final Concept concept =
-                conceptBuilder.id(UUID.randomUUID()).ts(System.currentTimeMillis()).build();
+                conceptBuilder
+                        .creationTimeMillis(System.currentTimeMillis())
+                        .id(UUID.randomUUID())
+                        .build();
 
-        this.conceptMap.put(concept.getName(), concept);
+        this.conceptMap.put(concept.getId(), concept);
 
         if (persistence != null) {
 
@@ -45,9 +48,9 @@ public class ConceptRepository {
         return concept;
     }
 
-    public Concept find(final String name) {
+    public Concept find(final UUID id) {
 
-        return this.conceptMap.get(name);
+        return this.conceptMap.get(id);
     }
 
     public void load(final SerialConcept serialConcept) {
@@ -55,10 +58,10 @@ public class ConceptRepository {
         final Concept concept =
                 new Concept.Builder()
                         .id(serialConcept.getId())
-                        .ts(serialConcept.getTs())
+                        .creationTimeMillis(serialConcept.getCreationTimeMillis())
                         .name(serialConcept.getName())
                         .build();
 
-        this.conceptMap.put(concept.getName(), concept);
+        this.conceptMap.put(concept.getId(), concept);
     }
 }

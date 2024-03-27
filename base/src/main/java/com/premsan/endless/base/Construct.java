@@ -21,5 +21,5 @@ public interface Construct {
 
     UUID getId();
 
-    long getTs();
+    long getCreationTimeMillis();
 }

@@ -15,20 +15,27 @@
  */
 package com.premsan.endless.base;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import java.io.Serializable;
 import java.util.UUID;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = SerialConcept.class, name = "CONCEPT"),
-    @JsonSubTypes.Type(value = SerialNode.class, name = "NODE"),
-    @JsonSubTypes.Type(value = SerialProperty.class, name = "PROPERTY")
-})
-public interface Serial extends Serializable {
+public class NodeRef {
 
-    UUID getId();
+    private final int hostNumber;
 
-    long getCreationTimeMillis();
+    private final UUID id;
+
+    public NodeRef(final int hostNumber, final UUID id) {
+
+        this.hostNumber = hostNumber;
+        this.id = id;
+    }
+
+    public int getHostNumber() {
+
+        return hostNumber;
+    }
+
+    public UUID getId() {
+
+        return id;
+    }
 }

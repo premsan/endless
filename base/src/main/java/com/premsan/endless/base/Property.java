@@ -21,55 +21,39 @@ import java.util.UUID;
 
 public class Property<T extends Serializable> implements Construct, Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
-    private final UUID id;
-
-    private final long ts;
-
+    private final long creationTimeMillis;
+    private final PropertySchema schema;
     private final Node node;
-
-    private final String name;
-
-    private final Class<T> dataType;
-
+    private final UUID id;
     private final T value;
 
     public Property(
-            final UUID id,
-            final long ts,
+            final long creationTimeMillis,
+            final PropertySchema schema,
             final Node node,
-            final String name,
-            final Class<T> dataType,
+            final UUID id,
             final T value) {
         Objects.requireNonNull(node, "node must not be null");
-        Objects.requireNonNull(name, "name must not be null");
-        Objects.requireNonNull(dataType, "type must not be null");
         Objects.requireNonNull(value, "value must not be null");
 
-        this.id = id;
-
-        this.ts = ts;
-
+        this.creationTimeMillis = creationTimeMillis;
+        this.schema = schema;
         this.node = node;
-
-        this.name = name;
-
-        this.dataType = dataType;
-
+        this.id = id;
         this.value = value;
     }
 
     @Override
-    public UUID getId() {
+    public long getCreationTimeMillis() {
 
-        return this.id;
+        return this.creationTimeMillis;
     }
 
-    @Override
-    public long getTs() {
+    public PropertySchema getSchema() {
 
-        return this.ts;
+        return this.schema;
     }
 
     public Node getNode() {
@@ -77,14 +61,10 @@ public class Property<T extends Serializable> implements Construct, Serializable
         return this.node;
     }
 
-    public Class<T> getDataType() {
+    @Override
+    public UUID getId() {
 
-        return this.dataType;
-    }
-
-    public String getName() {
-
-        return this.name;
+        return this.id;
     }
 
     public T getValue() {
@@ -99,29 +79,22 @@ public class Property<T extends Serializable> implements Construct, Serializable
 
     public static class Builder<T extends Serializable> {
 
-        private UUID id;
-
-        private long ts;
-
+        private long creationTimeMillis;
+        private PropertySchema schema;
         private Node node;
-
-        private String name;
-
-        private Class<T> dataType;
-
+        private UUID id;
         private T value;
 
-        public Builder<T> id(final UUID id) {
-            Objects.requireNonNull(id, "id must not be null");
+        public Builder<T> creationTimeMillis(final long creationTimeMillis) {
 
-            this.id = id;
+            this.creationTimeMillis = creationTimeMillis;
 
             return this;
         }
 
-        public Builder<T> ts(final long ts) {
+        public Builder<T> schema(final PropertySchema schema) {
 
-            this.ts = ts;
+            this.schema = schema;
 
             return this;
         }
@@ -134,18 +107,10 @@ public class Property<T extends Serializable> implements Construct, Serializable
             return this;
         }
 
-        public Builder<T> name(String name) {
-            Objects.requireNonNull(name, "id must not be null");
+        public Builder<T> id(final UUID id) {
+            Objects.requireNonNull(id, "id must not be null");
 
-            this.name = name;
-
-            return this;
-        }
-
-        public Builder<T> dataType(final Class<T> dataType) {
-            Objects.requireNonNull(dataType, "dataType must not be null");
-
-            this.dataType = dataType;
+            this.id = id;
 
             return this;
         }
@@ -161,7 +126,7 @@ public class Property<T extends Serializable> implements Construct, Serializable
         public Property<T> build() {
 
             return new Property<>(
-                    this.id, this.ts, this.node, this.name, this.dataType, this.value);
+                    this.creationTimeMillis, this.schema, this.node, this.id, this.value);
         }
     }
 }

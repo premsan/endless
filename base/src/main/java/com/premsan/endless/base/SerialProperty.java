@@ -36,7 +36,7 @@ public class SerialProperty implements Serial {
 
         this.id = property.getId();
 
-        this.ts = property.getTs();
+        this.ts = property.getCreationTimeMillis();
 
         this.nodeId = property.getNode().getId();
 
@@ -54,7 +54,7 @@ public class SerialProperty implements Serial {
     }
 
     @Override
-    public long getTs() {
+    public long getCreationTimeMillis() {
 
         return this.ts;
     }

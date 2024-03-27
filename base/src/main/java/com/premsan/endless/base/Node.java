@@ -16,45 +16,38 @@
 package com.premsan.endless.base;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 public class Node implements Construct, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    private final UUID id;
-
-    private final long ts;
-
+    private final long creationTimeMillis;
     private final Concept concept;
-
-    private final Map<Node, String> parents;
-
-    private final Map<String, Property<?>> properties = new HashMap<>();
-
-    private final Set<Property<?>> exProperties = new HashSet<>();
-
-    private final Set<Node> children = new HashSet<>();
+    private final UUID id;
+    private final Set<Property<?>> properties;
 
     private Node(
-            final UUID id, final long ts, final Concept concept, final Map<Node, String> parents) {
+            final long creationTimeMillis,
+            final Concept concept,
+            final UUID id,
+            final Set<Property<?>> properties) {
 
-        this.id = id;
-
-        this.ts = ts;
+        this.creationTimeMillis = creationTimeMillis;
 
         this.concept = concept;
         this.concept.addNode(this);
 
-        this.parents = parents;
-        for (final Node node : parents.keySet()) {
-            node.addChild(this);
-        }
+        this.id = id;
+        this.properties = properties;
+    }
+
+    @Override
+    public long getCreationTimeMillis() {
+
+        return this.creationTimeMillis;
     }
 
     @Override
@@ -63,81 +56,32 @@ public class Node implements Construct, Serializable {
         return this.id;
     }
 
-    @Override
-    public long getTs() {
-
-        return this.ts;
-    }
-
     public Concept getConcept() {
 
         return this.concept;
     }
 
-    public Map<Node, String> getParents() {
-
-        return this.parents;
-    }
-
-    public Set<Property<?>> getExProperties() {
-
-        return this.exProperties;
-    }
-
-    public synchronized void setProperty(final Property<?> property) {
-        Objects.requireNonNull(property, "property must not be null");
-
-        Property<?> property0 = this.properties.get(property.getName());
-        this.properties.put(property.getName(), property);
-
-        if (property0 != null) {
-            this.exProperties.add(property0);
-        }
-    }
-
-    public Map<String, Property<?>> getProperties() {
+    public Set<Property<?>> getProperties() {
 
         return this.properties;
     }
 
-    public Property<?> getProperty(final String name) {
-        Objects.requireNonNull(name, "name must not be null");
+    public synchronized void addProperty(final Property<?> property) {
+        Objects.requireNonNull(property, "property must not be null");
 
-        return this.properties.get(name);
-    }
-
-    synchronized void addChild(final Node child) {
-
-        this.children.add(child);
-    }
-
-    Set<Node> getChildren() {
-
-        return this.children;
+        this.properties.add(property);
     }
 
     public static class Builder {
 
-        private UUID id;
-
-        private long ts;
-
+        private long creationTimeMillis;
         private Concept concept;
+        private UUID id;
+        private Set<Property<?>> properties;
 
-        private final Map<Node, String> parents = new HashMap<>();
+        public Builder creationTimeMillis(final long creationTimeMillis) {
 
-        public Builder id(final UUID id) {
-            Objects.requireNonNull(id, "id must not be null");
-
-            this.id = id;
-
-            return this;
-        }
-
-        public Builder ts(final long ts) {
-            Objects.requireNonNull(ts, "ts must not be null");
-
-            this.ts = ts;
+            this.creationTimeMillis = creationTimeMillis;
 
             return this;
         }
@@ -150,18 +94,25 @@ public class Node implements Construct, Serializable {
             return this;
         }
 
-        public Builder addParent(final Node parent, final String role) {
-            Objects.requireNonNull(parent, "parent must not be null");
-            Objects.requireNonNull(role, "role must not be null");
+        public Builder id(final UUID id) {
+            Objects.requireNonNull(id, "id must not be null");
 
-            this.parents.put(parent, role);
+            this.id = id;
+
+            return this;
+        }
+
+        public Builder properties(final Set<Property<?>> properties) {
+            Objects.requireNonNull(properties, "properties must not be null");
+
+            this.properties = properties;
 
             return this;
         }
 
         public Node build() {
 
-            return new Node(this.id, this.ts, this.concept, this.parents);
+            return new Node(this.creationTimeMillis, this.concept, this.id, this.properties);
         }
     }
 }

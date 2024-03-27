@@ -43,7 +43,11 @@ public class NodeRepository {
     public synchronized Node add(final Node.Builder nodeBuilder) {
         Objects.requireNonNull(nodeBuilder, "node must not be null");
 
-        final Node node = nodeBuilder.id(UUID.randomUUID()).ts(System.currentTimeMillis()).build();
+        final Node node =
+                nodeBuilder
+                        .id(UUID.randomUUID())
+                        .creationTimeMillis(System.currentTimeMillis())
+                        .build();
 
         this.nodeMap.put(node.getId(), node);
 
@@ -75,15 +79,13 @@ public class NodeRepository {
 
     public void load(final SerialNode serialNode) {
 
-        final Concept concept = conceptRepository.find(serialNode.getConceptName());
+        final Concept concept = conceptRepository.find(serialNode.getId());
 
         final Node.Builder builder =
-                new Node.Builder().id(serialNode.getId()).ts(serialNode.getTs()).concept(concept);
-
-        for (final Map.Entry<UUID, String> entry : serialNode.getParents().entrySet()) {
-
-            builder.addParent(find(entry.getKey()), entry.getValue());
-        }
+                new Node.Builder()
+                        .creationTimeMillis(serialNode.getCreationTimeMillis())
+                        .id(serialNode.getId())
+                        .concept(concept);
 
         final Node node = builder.build();
 

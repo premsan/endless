@@ -35,14 +35,9 @@ public class SerialNode implements Serial {
 
         this.id = node.getId();
 
-        this.ts = node.getTs();
+        this.ts = node.getCreationTimeMillis();
 
         this.conceptName = node.getConcept().getName();
-
-        for (final Map.Entry<Node, String> parentEntry : node.getParents().entrySet()) {
-
-            parents.put(parentEntry.getKey().getId(), parentEntry.getValue());
-        }
     }
 
     @Override
@@ -52,7 +47,7 @@ public class SerialNode implements Serial {
     }
 
     @Override
-    public long getTs() {
+    public long getCreationTimeMillis() {
 
         return this.ts;
     }

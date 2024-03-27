@@ -29,7 +29,7 @@ public class SerialConcept implements Serial {
 
         this.id = concept.getId();
 
-        this.ts = concept.getTs();
+        this.ts = concept.getCreationTimeMillis();
 
         this.name = concept.getName();
     }
@@ -41,7 +41,7 @@ public class SerialConcept implements Serial {
     }
 
     @Override
-    public long getTs() {
+    public long getCreationTimeMillis() {
 
         return this.ts;
     }
