@@ -16,17 +16,17 @@
 package com.premsan.endless.base;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Node implements Construct, Serializable {
+public class Node implements Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 5L;
 
     private final long creationTimeMillis;
     private final Concept concept;
     private final UUID id;
+
     private final Set<Property<?>> properties;
 
     private Node(
@@ -34,85 +34,25 @@ public class Node implements Construct, Serializable {
             final Concept concept,
             final UUID id,
             final Set<Property<?>> properties) {
-
         this.creationTimeMillis = creationTimeMillis;
-
         this.concept = concept;
-        this.concept.addNode(this);
-
         this.id = id;
         this.properties = properties;
     }
 
-    @Override
     public long getCreationTimeMillis() {
-
-        return this.creationTimeMillis;
-    }
-
-    @Override
-    public UUID getId() {
-
-        return this.id;
+        return creationTimeMillis;
     }
 
     public Concept getConcept() {
+        return concept;
+    }
 
-        return this.concept;
+    public UUID getId() {
+        return id;
     }
 
     public Set<Property<?>> getProperties() {
-
-        return this.properties;
-    }
-
-    public synchronized void addProperty(final Property<?> property) {
-        Objects.requireNonNull(property, "property must not be null");
-
-        this.properties.add(property);
-    }
-
-    public static class Builder {
-
-        private long creationTimeMillis;
-        private Concept concept;
-        private UUID id;
-        private Set<Property<?>> properties;
-
-        public Builder creationTimeMillis(final long creationTimeMillis) {
-
-            this.creationTimeMillis = creationTimeMillis;
-
-            return this;
-        }
-
-        public Builder concept(final Concept concept) {
-            Objects.requireNonNull(concept, "concept must not be null");
-
-            this.concept = concept;
-
-            return this;
-        }
-
-        public Builder id(final UUID id) {
-            Objects.requireNonNull(id, "id must not be null");
-
-            this.id = id;
-
-            return this;
-        }
-
-        public Builder properties(final Set<Property<?>> properties) {
-            Objects.requireNonNull(properties, "properties must not be null");
-
-            this.properties = properties;
-
-            return this;
-        }
-
-        public Node build() {
-
-            return new Node(this.creationTimeMillis, this.concept, this.id, this.properties);
-        }
+        return properties;
     }
 }

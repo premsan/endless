@@ -19,114 +19,42 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Property<T extends Serializable> implements Construct, Serializable {
+public class Property<T extends Serializable> implements Serializable {
 
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
 
     private final long creationTimeMillis;
     private final PropertySchema schema;
-    private final Node node;
     private final UUID id;
+
     private final T value;
 
     public Property(
             final long creationTimeMillis,
             final PropertySchema schema,
-            final Node node,
             final UUID id,
             final T value) {
-        Objects.requireNonNull(node, "node must not be null");
         Objects.requireNonNull(value, "value must not be null");
 
         this.creationTimeMillis = creationTimeMillis;
         this.schema = schema;
-        this.node = node;
         this.id = id;
         this.value = value;
     }
 
-    @Override
     public long getCreationTimeMillis() {
-
-        return this.creationTimeMillis;
+        return creationTimeMillis;
     }
 
     public PropertySchema getSchema() {
-
-        return this.schema;
+        return schema;
     }
 
-    public Node getNode() {
-
-        return this.node;
-    }
-
-    @Override
     public UUID getId() {
-
-        return this.id;
+        return id;
     }
 
     public T getValue() {
-
-        return this.value;
-    }
-
-    public <C> C getValue(final Class<C> type) {
-
-        return type.cast(this.value);
-    }
-
-    public static class Builder<T extends Serializable> {
-
-        private long creationTimeMillis;
-        private PropertySchema schema;
-        private Node node;
-        private UUID id;
-        private T value;
-
-        public Builder<T> creationTimeMillis(final long creationTimeMillis) {
-
-            this.creationTimeMillis = creationTimeMillis;
-
-            return this;
-        }
-
-        public Builder<T> schema(final PropertySchema schema) {
-
-            this.schema = schema;
-
-            return this;
-        }
-
-        public Builder<T> node(final Node node) {
-            Objects.requireNonNull(node, "node must not be null");
-
-            this.node = node;
-
-            return this;
-        }
-
-        public Builder<T> id(final UUID id) {
-            Objects.requireNonNull(id, "id must not be null");
-
-            this.id = id;
-
-            return this;
-        }
-
-        public Builder<T> value(final T value) {
-            Objects.requireNonNull(value, "value must not be null");
-
-            this.value = value;
-
-            return this;
-        }
-
-        public Property<T> build() {
-
-            return new Property<>(
-                    this.creationTimeMillis, this.schema, this.node, this.id, this.value);
-        }
+        return value;
     }
 }

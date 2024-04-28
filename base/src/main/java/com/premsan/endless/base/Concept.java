@@ -16,106 +16,50 @@
 package com.premsan.endless.base;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public final class Concept implements Construct, Serializable {
+public final class Concept implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private final long creationTimeMillis;
+    private final Cluster cluster;
     private final UUID id;
-    private final String name;
-    private final List<PropertySchema> propertySchemaList;
 
-    private final Set<Node> nodes = new HashSet<>();
+    private final String name;
+    private final Set<PropertySchema> properties;
 
     private Concept(
             final long creationTimeMillis,
+            final Cluster cluster,
             final UUID id,
             final String name,
-            final List<PropertySchema> propertySchemaList) {
-
+            final Set<PropertySchema> properties) {
         this.creationTimeMillis = creationTimeMillis;
+        this.cluster = cluster;
         this.id = id;
         this.name = name;
-        this.propertySchemaList = propertySchemaList;
+        this.properties = properties;
     }
 
-    @Override
     public long getCreationTimeMillis() {
-
-        return this.creationTimeMillis;
+        return creationTimeMillis;
     }
 
-    @Override
-    public UUID getId() {
+    public Cluster getCluster() {
+        return cluster;
+    }
 
-        return this.id;
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
-
-        return this.name;
+        return name;
     }
 
-    public List<PropertySchema> getPropertySchemaList() {
-
-        return this.propertySchemaList;
-    }
-
-    synchronized void addNode(final Node node) {
-
-        this.nodes.add(node);
-    }
-
-    public Set<Node> getNodes() {
-
-        return this.nodes;
-    }
-
-    public static class Builder {
-
-        private long creationTimeMillis;
-        private UUID id;
-        private String name;
-        private List<PropertySchema> propertySchemaList;
-
-        public Builder creationTimeMillis(final long creationTimeMillis) {
-
-            this.creationTimeMillis = creationTimeMillis;
-
-            return this;
-        }
-
-        public Builder id(final UUID id) {
-            Objects.requireNonNull(id, "id must not be null");
-
-            this.id = id;
-
-            return this;
-        }
-
-        public Builder name(final String name) {
-
-            this.name = name;
-
-            return this;
-        }
-
-        public Builder propertySchemaList(final List<PropertySchema> propertySchemaList) {
-
-            this.propertySchemaList = propertySchemaList;
-
-            return this;
-        }
-
-        public Concept build() {
-
-            return new Concept(this.creationTimeMillis, this.id, this.name, propertySchemaList);
-        }
+    public Set<PropertySchema> getProperties() {
+        return properties;
     }
 }

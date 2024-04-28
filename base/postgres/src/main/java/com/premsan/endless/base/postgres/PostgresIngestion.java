@@ -21,12 +21,18 @@ import com.premsan.endless.base.Context;
 import com.premsan.endless.base.Node;
 import com.premsan.endless.base.ObjectMapperFactory;
 import com.premsan.endless.base.SerialNode;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class PostgresIngestion implements Runnable {
 
@@ -41,6 +47,29 @@ public class PostgresIngestion implements Runnable {
 
         this.context = context;
         this.connection = getConnection();
+
+
+        try {
+
+            final String SQL =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    Objects.requireNonNull(
+                                            getClass().getResourceAsStream(
+                                                    "/CREATE_TABLES.sql"))))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
+
+            Statement statement = this.connection.createStatement();
+
+            statement.execute(SQL);
+
+            new Thread(this).start();
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
     }
 
     protected Connection getConnection() throws SQLException {
@@ -80,7 +109,10 @@ public class PostgresIngestion implements Runnable {
 
                 Thread.sleep(1000);
 
-            } catch (final InterruptedException | JsonProcessingException | SQLException e) {
+            } catch (final InterruptedException ignored) {
+
+
+            } catch (final JsonProcessingException | SQLException e) {
 
                 throw new RuntimeException(e);
             }

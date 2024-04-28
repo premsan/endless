@@ -15,51 +15,66 @@
  */
 package com.premsan.endless.base;
 
-public class PropertySchema {
+import java.io.Serializable;
+import java.util.UUID;
 
-    private final DataType dataType;
+public class PropertySchema implements Serializable {
+
+    private static final long serialVersionUID = 3L;
+
+    private final long creationTimeMillis;
+    private final Concept concept;
+    private final UUID id;
+
     private final String name;
+    private final PropertyType propertyType;
     private final int minCardinality;
     private final int maxCardinality;
 
     public PropertySchema(
-            final DataType dataType,
+            final long creationTimeMillis,
+            final Concept concept,
+            final UUID id,
             final String name,
+            final PropertyType propertyType,
             final int minCardinality,
             final int maxCardinality) {
 
-        this.dataType = dataType;
+        this.creationTimeMillis = creationTimeMillis;
+        this.concept = concept;
+        this.id = id;
+
         this.name = name;
+        this.propertyType = propertyType;
         this.minCardinality = minCardinality;
         this.maxCardinality = maxCardinality;
     }
 
-    public DataType getPrimitive() {
+    public long getCreationTimeMillis() {
+        return creationTimeMillis;
+    }
 
-        return this.dataType;
+    public Concept getConcept() {
+        return concept;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
+        return name;
+    }
 
-        return this.name;
+    public PropertyType getPropertyType() {
+        return propertyType;
     }
 
     public int getMinCardinality() {
-
-        return this.minCardinality;
+        return minCardinality;
     }
 
     public int getMaxCardinality() {
-
-        return this.maxCardinality;
-    }
-
-    public enum DataType {
-        INTEGER,
-        LONG,
-        FLOAT,
-        DOUBLE,
-        BOOLEAN,
-        NODE_REF
+        return maxCardinality;
     }
 }
